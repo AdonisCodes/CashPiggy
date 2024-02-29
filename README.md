@@ -21,7 +21,7 @@ pip install cashpiggy
 You can import the CashPiggy package in your Python script or interactive session using the following import statement:
 
 ```python
-import cashpiggy_am
+import cashpiggy
 ```
 
 ### Creating an Account
@@ -29,7 +29,7 @@ import cashpiggy_am
 To create a CashPiggy account, you can use the `register` method of the `CashPiggyAccount` class:
 
 ```python
-account = cashpiggy_am.CashPiggyAccount.register("your_email@example.com")
+account = cashpiggy.CashPiggyAccount.register("your_email@example.com")
 ```
 
 This method returns a `CashPiggyAccount` object representing the newly created account. If the registration fails, it returns `None`.
@@ -49,7 +49,7 @@ This method takes the number of points to claim as an argument and returns `True
 To cash out your earnings, you can use the `cashout` method of the `CashPiggyAccount` class:
 
 ```python
-success = account.cashout(cashpiggy_am.CashPiggyCashoutMethod.PAYPAL_5, "US")
+success = account.cashout(cashpiggy.CashPiggyCashoutMethod.PAYPAL_5, "US")
 ```
 
 This method takes the cashout method (`CashPiggyCashoutMethod` enum) and the country code as arguments and returns `True` if the cashout is successful, otherwise `False`.
