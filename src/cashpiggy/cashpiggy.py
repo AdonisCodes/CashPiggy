@@ -6,17 +6,22 @@ import string
 from typing import Optional, List
 import requests
 from datetime import datetime
+from . import urls
 import logging
 logging.basicConfig(filename='cashpiggy.log', level=logging.INFO)
 
 def generate_random_ip():
+    """Generate a random IP address."""
+
     return ".".join(str(random.randint(0, 255)) for _ in range(4))
 
 
-APPNAME = "cashpiggy_14"
+APPNAME = "cashpiggy_14" # App Version
 
 
 class Country(Enum):
+    """Enum for supported countries."""
+
     SOUTH_AFRICA = "ZA"
     UNITED_STATES = "US"
     UNITED_KINGDOM = "GB"
@@ -49,6 +54,8 @@ class Country(Enum):
     NETHERLANDS = "NL"
 
 class CashPiggyCashoutMethod(Enum):
+    """Enum for supported cashout methods."""
+
     PAYPAL_3 = ("$3%20PayPal%20Cash", 3, 250)
     AMAZON_1 = ("$1%20Amazon%20Card", 1, 600)
     PAYPAL_5 = ("$5%20PayPal%20Cash", 5, 1000)
@@ -62,6 +69,8 @@ class CashPiggyCashoutMethod(Enum):
 
 @dataclass
 class CashPiggyAccountReferrals:
+    """Dataclass for CashPiggy account referrals."""
+
     referral_id: str
     ip: str
     first_ref: str
@@ -72,6 +81,8 @@ class CashPiggyAccountReferrals:
 
 @dataclass
 class CashPiggyCashoutHistory:
+    """Dataclass for CashPiggy cashout history."""
+
     amountindollar: str
     invitecode: str
     points: str
@@ -85,16 +96,27 @@ class CashPiggyCashoutHistory:
 
 @dataclass
 class CashPiggyAccount:
+    """Dataclass for CashPiggy account."""
+
     code: str
     ip: str
     email: Optional[str]
     country: Optional[Country]
-    claim_points_url: str = "https://djkmhg4jm0.execute-api.us-east-2.amazonaws.com/default/surveys_adjustpoints?points={}&uniquecode={}&desc=free_bonus"
 
     def claim_points(self, points: int) -> bool:
+        """Claim points for the account.
+        
+        Args:
+            self: The CashPiggy account.
+            points (int): The points to claim.
+
+        Returns:
+            bool: True if successful, False otherwise.
+        """
+
         logging.info(f'Starting claim_points for {self.email}')
         try:
-            response = requests.get(self.claim_points_url.format(points, self.code))
+            response = requests.get(urls.claim_points_url.format(points, self.code))
             if response.status_code == 200:
                 logging.info(f'Successful claim_points for {self.email} ✅')
                 return True
@@ -108,8 +130,19 @@ class CashPiggyAccount:
             logging.info(f'Finished claim_points for {self.email}')
 
     def cashout(self, method: CashPiggyCashoutMethod, country: str) -> bool:
+        """Cashout points for the account.
+
+        Args:
+            self: The CashPiggy account.
+            method (CashPiggyCashoutMethod): The cashout method.
+            country (str): The country code.
+
+        Returns:
+            bool: True if successful, False otherwise.
+        """
+
         cashout_method, dollar, points = method.value
-        response = requests.get(f"https://69ppjn70tj.execute-api.us-east-2.amazonaws.com/default/rewardHistoryInsertData?ic={self.code}&cn={cashout_method}&dollar={dollar}&points={points}&time={datetime.now().timestamp}&pemail={self.email}&appname={APPNAME}&country={country}")
+        response = requests.get(urls.cashout_points_url.format(self.code, cashout_method, dollar, points, datetime.now().timestamp(), self.email, APPNAME, country))
         if response.status_code == 200:
             logging.info(f'Successful cashout for {self.email} ✅')
             return True
@@ -118,7 +151,17 @@ class CashPiggyAccount:
             return False
 
     def become_referral(self, referral_code: str) -> bool:
-        response = requests.get(f"https://eighth-vehicle-107008.appspot.com/_ah/api/handlert/v1/object/{referral_code}/{self.code}")
+        """Become a referral for another account.
+
+        Args:
+            self: The CashPiggy account.
+            referral_code (str): The referral code.
+
+        Returns:
+            bool: True if successful, False otherwise.
+        """
+
+        response = requests.get(urls.become_referral_url.format(referral_code, self.code))
         if response.status_code == 200:
             logging.info(f'Successfully became referral for {self.email} ✅')
             return True
@@ -127,7 +170,16 @@ class CashPiggyAccount:
             return False
 
     def get_referrals(self) -> Optional[CashPiggyAccountReferrals]:
-        response = requests.get(f"https://eighth-vehicle-107008.appspot.com/_ah/api/handlert/v1/retrieveRef/{self.code}")
+        """Get referrals for the account.
+
+        Args:
+            self: The CashPiggy account.
+
+        Returns:
+            Optional[CashPiggyAccountReferrals]: The account referrals if successful, None otherwise.
+        """
+
+        response = requests.get(urls.retrieve_referrals_url.format(self.code))
         if response.status_code == 200:
             logging.info(f'Successfully retrieved referrals for {self.email} ✅')
             return CashPiggyAccountReferrals(**response.json())
@@ -136,7 +188,16 @@ class CashPiggyAccount:
             return None
 
     def get_cashout_history(self) -> Optional[List[CashPiggyCashoutHistory]]:
-        response = requests.get(f"https://oqdyz05zj9.execute-api.us-east-2.amazonaws.com/default/rewardHistoryGetData?invitecode={self.code}")
+        """Get cashout history for the account.
+
+        Args:
+            self: The CashPiggy account.
+
+        Returns:
+            Optional[List[CashPiggyCashoutHistory]]: The cashout history if successful, None otherwise.
+        """
+
+        response = requests.get(urls.retrieve_rewards_history_url.format(self.code))
         if response.status_code == 200:
             try:
                 logging.info(f'Successfully retrieved cashout history for {self.email} ✅')
@@ -150,13 +211,22 @@ class CashPiggyAccount:
 
     @staticmethod
     def register(email: str) -> Optional['CashPiggyAccount']:
+        """Register a new CashPiggy account.
+
+        Args:
+            email (str): The email to register.
+
+        Returns:
+            Optional[CashPiggyAccount]: The registered account if successful, None otherwise.
+        """
+
         random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
         random_ip = generate_random_ip()
-        response = requests.get(f"https://eighth-vehicle-107008.appspot.com/_ah/api/handlert/v1/cn_insertRef/{random_code}/{random_ip}")
+        response = requests.get(urls.signup_url.format(random_code, random_ip))
         if response.status_code == 200:
             random_country = random.choice(list(Country))
             logging.info(f'Successfully registered account for {email} ✅')
             return CashPiggyAccount(random_code, random_ip, email, random_country)
         else:
             logging.error(f'Failed to register account for {email} ❌')
-            return None# Example where we do a pyramid scheme referrals
+            return None
