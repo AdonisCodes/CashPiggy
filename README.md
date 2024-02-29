@@ -85,6 +85,3 @@ The CashPiggy-AM package provides a convenient way to interact with CashPiggy's 
 ---
 
 This documentation provides an overview of the package, installation instructions, and usage examples for its main functionalities. Users can refer to this documentation to effectively utilize the `cashpiggy-am` package in their Python projects.
-# CashPiggy
-# CashPiggy
-# CashPiggy
