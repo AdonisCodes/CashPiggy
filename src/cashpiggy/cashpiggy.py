@@ -160,20 +160,3 @@ class CashPiggyAccount:
         else:
             logging.error(f'Failed to register account for {email} ❌')
             return None# Example where we do a pyramid scheme referrals
-
-
-master_referral = CashPiggyAccount.register("business@simonferns.com")
-print(master_referral)
-if not master_referral:
-    print("Failed to register")
-    exit()
-
-for i in range(10):
-    account = CashPiggyAccount.register(f"business+{i}@simonferns.com")
-    if account:
-        if i > 0:
-            account.become_referral(master_referral.code)
-        with open("accounts.txt", "a") as f:
-            f.write(f"{account.code} {account.ip} {account.email} {account.country}\n")
-    else:
-        print("Failed to register")
