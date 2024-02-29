@@ -6,7 +6,7 @@ setuptools.setup(
     name='cashpiggy',
     author='AdonisCodes',
     author_email='business@simonferns.com',
-    description='An API wrapper around the caspiggy mobile app',
+    description='An API wrapper around the cashpiggy mobile app!',
     keywords='package, automation, cashpiggy, mobile-app',
     long_description=long_description,
     long_description_content_type='text/markdown',
