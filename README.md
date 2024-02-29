@@ -1,24 +1,24 @@
 ---
 
-# CashPiggy-AM PyPI Package Documentation
+# CashPiggy PyPI Package Documentation
 
 ## Overview
 
-CashPiggy-AM is a Python package designed to provide easy access to CashPiggy's services through a set of classes and methods. CashPiggy is a platform that allows users to earn rewards by participating in surveys and referrals.
+CashPiggy is a Python package designed to provide easy access to CashPiggy's services through a set of classes and methods. CashPiggy is a platform that allows users to earn rewards by participating in surveys and referrals.
 
 ## Installation
 
-You can install the CashPiggy-AM package via pip. Open your terminal and run the following command:
+You can install the CashPiggy package via pip. Open your terminal and run the following command:
 
 ```bash
-pip install cashpiggy-am
+pip install cashpiggy
 ```
 
 ## Usage
 
 ### Importing the Package
 
-You can import the CashPiggy-AM package in your Python script or interactive session using the following import statement:
+You can import the CashPiggy package in your Python script or interactive session using the following import statement:
 
 ```python
 import cashpiggy_am
@@ -80,8 +80,8 @@ The package uses logging to track the execution flow and any errors encountered 
 
 ## Conclusion
 
-The CashPiggy-AM package provides a convenient way to interact with CashPiggy's services programmatically, allowing users to create accounts, claim points, cash out earnings, and retrieve account information easily.
+The CashPiggy package provides a convenient way to interact with CashPiggy's services programmatically, allowing users to create accounts, claim points, cash out earnings, and retrieve account information easily.
 
 ---
 
-This documentation provides an overview of the package, installation instructions, and usage examples for its main functionalities. Users can refer to this documentation to effectively utilize the `cashpiggy-am` package in their Python projects.
+This documentation provides an overview of the package, installation instructions, and usage examples for its main functionalities. Users can refer to this documentation to effectively utilize the `cashpiggy` package in their Python projects.
