@@ -12,10 +12,10 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/AdonisCodes/CashPiggy-am',
     project_urls={
-        'Documentation': 'https://github.com/AdonisCodes/CashPiggy-am',
+        'Documentation': 'https://github.com/AdonisCodes/CashPiggy',
         'Bug Reports':
-        'https://github.com/AdonisCodes/CashPiggy-am/issues',
-        'Source Code': 'https://github.com/AdonisCodes/CashPiggy-am',
+        'https://github.com/AdonisCodes/CashPiggy/issues',
+        'Source Code': 'https://github.com/AdonisCodes/CashPiggy',
     },
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
